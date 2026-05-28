@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportCoach AI - Coach Sportif Intelligent</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary: 45 100% 51%;
+            --background: 0 0% 7%;
+            --foreground: 0 0% 95%;
+            --card: 0 0% 10%;
+            --muted: 0 0% 15%;
+            --muted-foreground: 0 0% 60%;
+            --popover: 0 0% 10%;
+            --border: 0 0% 20%;
+            --input: 0 0% 20%;
+            --ring: 45 100% 51%;
+            --neo-light: 0 0% 12%;
+            --neo-dark: 0 0% 3%;
+            --neo-shadow-light: 0 0% 15%;
+            --neo-shadow-dark: 0 0% 2%;
+        }
+
+        .light {
+            --background: 0 0% 98%;
+            --foreground: 0 0% 0%;
+            --card: 0 0% 98%;
+            --muted: 0 0% 96%;
+            --muted-foreground: 0 0% 45%;
+            --popover: 0 0% 100%;
+            --border: 0 0% 90%;
+            --input: 0 0% 90%;
+            --neo-light: 0 0% 98%;
+            --neo-dark: 0 0% 70%;
+            --neo-shadow-light: 0 0% 100%;
+            --neo-shadow-dark: 0 0% 60%;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', system-ui, sans-serif;
+            background: var(--background);
+            color: var(--foreground);
+            transition: all 0.3s ease;
+        }
+
+        .neu-flat {
+            background: var(--background);
+            box-shadow: 8px 8px 16px var(--neo-shadow-dark), -8px -8px 16px var(--neo-shadow-light);
+        }
+
+        .neu-raised {
+            background: var(--background);
+            box-shadow: inset 4px 4px 8px var(--neo-shadow-dark), inset -4px -4px 8px var(--neo-shadow-light);
+        }
+
+        .neu-pressed {
+            box-shadow: inset 6px 6px 12px var(--neo-shadow-dark), inset -6px -6px 12px var(--neo-shadow-light);
+        }
+
+        .neu-convex {
+            background: linear-gradient(145deg, var(--neo-light), var(--neo-dark));
+            box-shadow: 8px 8px 16px var(--neo-shadow-dark), -8px -8px 16px var(--neo-shadow-light);
+        }
+
+        .neu-concave {
+            background: linear-gradient(145deg, var(--neo-dark), var(--neo-light));
+            box-shadow: inset 6px 6px 12px var(--neo-shadow-dark), inset -6px -6px 12px var(--neo-shadow-light);
+        }
+
+        .liquid-button {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            gap: 8px;
+            white-space: nowrap;
+            border-radius: 12px;
+            text-sm;
+            font-weight: 500;
+            transition: all 0.3s;
+            outline: none;
+            padding: 12px 24px;
+            border: none;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .liquid-button-variant-default {
+            background: transparent;
+            transition: transform 0.3s;
+        }
+
+        .liquid-button-variant-default:hover {
+            transform: scale(1.05);
+        }
+
+        .liquid-button-variant-cool {
+            background: linear-gradient(145deg, var(--neo-light), var(--neo-dark));
+            border: 1px solid var(--border);
+            border-bottom: 2px solid rgba(0,0,0,0.4);
+            color: var(--foreground);
+            text-shadow: 0 -1px 0 rgba(0,0,0,0.1);
+            transition: all 0.2s cubic-bezier(0.1, 0.4, 0.2, 1);
+        }
+
+        .liquid-button-variant-cool:hover {
+            filter: brightness(1.1);
+        }
+
+        .liquid-button-variant-cool:active {
+            transform: translateY(2px) scale(0.99);
+            filter: brightness(0.9);
+        }
+
+        .liquid-button-variant-outline {
+            border: 1px solid var(--border);
+            background: var(--card);
+        }
+
+        .liquid-button-variant-outline:hover {
+            background: var(--accent);
+            color: var(--accent-foreground);
+        }
+
+        .liquid-button-variant-secondary {
+            background: var(--muted);
+        }
+
+        .liquid-button-variant-secondary:hover {
+            background: var(--muted);
+            opacity: 0.8;
+        }
+
+        .liquid-button-variant-ghost {
+            background: transparent;
+        }
+
+        .liquid-button-variant-ghost:hover {
+            background: var(--accent);
+        }
+
+        .glass-effect {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.1);
+            border-radius: inherit;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 235, 59, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(255, 235, 59, 0.6); }
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes exercise-squat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes exercise-pushup {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+
+        @keyframes exercise-jumpingjack {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-30px) scale(1.1); }
+        }
+
+        @keyframes exercise-plank {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-2px); }
+        }
+
+        @keyframes exercise-burpee {
+            0%, 100% { transform: translateY(0) scale(1); }
+            25% { transform: translateY(-25px) scale(1.1); }
+            50% { transform: translateY(-10px) scale(0.9); }
+            75% { transform: translateY(-20px) scale(1.05); }
+        }
+
+        .exercise-animation-squat { animation: exercise-squat 1s ease-in-out infinite; }
+        .exercise-animation-pushup { animation: exercise-pushup 1.5s ease-in-out infinite; }
+        .exercise-animation-jumpingjack { animation: exercise-jumpingjack 0.5s ease-in-out infinite; }
+        .exercise-animation-plank { animation: exercise-plank 2s ease-in-out infinite; }
+        .exercise-animation-burpee { animation: exercise-burpee 2s ease-in-out infinite; }
+
+        .tab-active {
+            background: linear-gradient(145deg, var(--neo-light), var(--neo-dark));
+            border: 1px solid var(--primary);
+        }
+
+        .hidden { display: none !important; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--muted); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+        .chat-message {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .typing-indicator span {
+            animation: typing 1.4s infinite;
+            display: inline-block;
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="dark">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 neu-convex border-b border-border">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="h-10 w-10 rounded-xl bg-primary flex items-center justify-center animate-pulse-glow">
+                        <i data-lucide="dumbbell" class="w-6 h-6 text-primary-foreground"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold">
+                        Sport<span class="text-primary">Coach</span> AI
+                    </h1>
+                </div>
+
+                <div class="hidden md:flex items-center gap-2">
+                    <button onclick="showPage('home')" class="liquid-button liquid-button-variant-outline size-sm" data-tab="home">
+                        <i data-lucide="home" class="w-4 h-4"></i> Accueil
+                    </button>
+                    <button onclick="showPage('workouts')" class="liquid-button liquid-button-variant-outline size-sm" data-tab="workouts">
+                        <i data-lucide="book-open" class="w-4 h-4"></i> Exercices
+                    </button>
+                    <button onclick="showPage('timer')" class="liquid-button liquid-button-variant-outline size-sm" data-tab="timer">
+                        <i data-lucide="timer" class="w-4 h-4"></i> Timer
+                    </button>
+                    <button onclick="showPage('chat')" class="liquid-button liquid-button-variant-outline size-sm" data-tab="chat">
+                        <i data-lucide="bot" class="w-4 h-4"></i> Coach IA
+                    </button>
+                    <button onclick="showPage('profile')" class="liquid-button liquid-button-variant-outline size-sm" data-tab="profile">
+                        <i data-lucide="settings" class="w-4 h-4"></i> Paramètres
+                    </button>
+                </div>
+
+                <button onclick="toggleTheme()" class="liquid-button liquid-button-variant-cool size-icon">
+                    <i data-lucide="moon" class="w-5 h-5" id="theme-icon"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Navigation -->
+            <div class="md:hidden mt-4 flex gap-2 overflow-x-auto pb-2">
+                <button onclick="showPage('home')" class="liquid-button liquid-button-variant-outline size-sm min-w-[100px]" data-tab="home">
+                    <i data-lucide="home" class="w-4 h-4"></i> Accueil
+                </button>
+                <button onclick="showPage('workouts')" class="liquid-button liquid-button-variant-outline size-sm min-w-[100px]" data-tab="workouts">
+                    <i data-lucide="book-open" class="w-4 h-4"></i> Exercices
+                </button>
+                <button onclick="showPage('timer')" class="liquid-button liquid-button-variant-outline size-sm min-w-[100px]" data-tab="timer">
+                    <i data-lucide="timer" class="w-4 h-4"></i> Timer
+                </button>
+                <button onclick="showPage('chat')" class="liquid-button liquid-button-variant-outline size-sm min-w-[100px]" data-tab="chat">
+                    <i data-lucide="bot" class="w-4 h-4"></i> IA
+                </button>
+                <button onclick="showPage('profile')" class="liquid-button liquid-button-variant-outline size-sm min-w-[100px]" data-tab="profile">
+                    <i data-lucide="settings" class="w-4 h-4"></i> Paramètres
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="page-home" class="page">
+        <div class="container mx-auto px-4 py-12">
+            <!-- Hero Section -->
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center gap-2 neu-convex px-6 py-2 rounded-full mb-6">
+                    <i data-lucide="zap" class="w-4 h-4 text-primary"></i>
+                    <span class="text-sm font-semibold">Nouveau: Coach IA Personnalisé</span>
+                </div>
+
+                <h1 class="text-6xl md:text-8xl font-bold mb-6">
+                    Votre Coach
+                    <br>
+                    <span class="text-primary">Sportif IA</span>
+                </h1>
+
+                <p class="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto">
+                    Entraînez-vous comme un pro avec notre application de coaching intelligent.
+                    Exercices animés, programmes personnalisés et suivi en temps réel.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="showPage('workouts')" class="liquid-button liquid-button-variant-cool size-xl">
+                        <i data-lucide="play" class="w-6 h-6"></i>
+                        Commencer Gratuitement
+                    </button>
+                    <button onclick="showPage('profile')" class="liquid-button liquid-button-variant-outline size-xl">
+                        <i data-lucide="crown" class="w-6 h-6"></i>
+                        Voir la Démo
+                    </button>
+                </div>
+
+                <div class="mt-12 flex flex-wrap justify-center gap-8 text-muted-foreground">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="users" class="w-5 h-5 text-primary"></i>
+                        <span>50k+ Utilisateurs</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="star" class="w-5 h-5 fill-primary text-primary"></i>
+                        <span>4.8/5 Rating</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="award" class="w-5 h-5 text-primary"></i>
+                        <span>App de l'Année</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="mb-16">
+                <h2 class="text-4xl font-bold text-center mb-12">Fonctionnalités</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="neu-convex p-6 rounded-2xl hover:scale-105 transition-transform">
+                        <div class="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+                            <i data-lucide="zap" class="w-6 h-6 text-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Coach IA Intelligent</h3>
+                        <p class="text-muted-foreground">Conseils personnalisés en temps réel basés sur vos performances.</p>
+                    </div>
+
+                    <div class="neu-convex p-6 rounded-2xl hover:scale-105 transition-transform">
+                        <div class="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+                            <i data-lucide="video" class="w-6 h-6 text-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Exercices Animés</h3>
+                        <p class="text-muted-foreground">Animations détaillées pour maîtriser chaque mouvement.</p>
+                    </div>
+
+                    <div class="neu-convex p-6 rounded-2xl hover:scale-105 transition-transform">
+                        <div class="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+                            <i data-lucide="target" class="w-6 h-6 text-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Programmes Sur Mesure</h3>
+                        <p class="text-muted-foreground">Plans adaptés à votre niveau et objectifs.</p>
+                    </div>
+
+                    <div class="neu-convex p-6 rounded-2xl hover:scale-105 transition-transform">
+                        <div class="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+                            <i data-lucide="trending-up" class="w-6 h-6 text-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Suivi des Progrès</h3>
+                        <p class="text-muted-foreground">Statistiques détaillées et graphiques de votre évolution.</p>
+                    </div>
+
+                    <div class="neu-convex p-6 rounded-2xl hover:scale-105 transition-transform">
+                        <div class="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+                            <i data-lucide="timer" class="w-6 h-6 text-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Timer Avancé</h3>
+                        <p class="text-muted-foreground">Chronomètre avec pauses automatiques et notifications.</p>
+                    </div>
+
+                    <div class="neu-convex p-6 rounded-2xl hover:scale-105 transition-transform">
+                        <div class="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+                            <i data-lucide="bell-off" class="w-6 h-6 text-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Sans Publicité</h3>
+                        <p class="text-muted-foreground">Version Premium sans interruptions pour une expérience fluide.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing Section -->
+            <div class="mb-16">
+                <h2 class="text-4xl font-bold text-center mb-12">Tarifs</h2>
+                <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                    <div class="neu-flat p-8 rounded-2xl">
+                        <h3 class="text-2xl font-bold mb-2">Gratuit</h3>
+                        <div class="mb-6">
+                            <span class="text-5xl font-bold">$0</span>
+                            <span class="text-muted-foreground">/mois</span>
+                        </div>
+                        <ul class="mb-8 space-y-3">
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-5 h-5 text-primary"></i>
+                                <span>Accès limité aux workouts</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-5 h-5 text-primary"></i>
+                                <span>Avec publicités</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-5 h-5 text-primary"></i>
+                                <span>Timer basique</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-5 h-5 text-primary"></i>
+                                <span>5 exercices animés</span>
+                            </li>
+                        </ul>
+                        <button class="liquid-button liquid-button-variant-outline w-full size-lg" onclick="showPage('workouts')">
+                            Commencer
+                        </button>
+                    </div>
+
+                    <div class="neu-convex p-8 rounded-2xl ring-2 ring-primary animate-pulse-glow">
+                        <div class="inline-block bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-semibold mb-4">
+                            Populaire
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Premium</h3>
+                        <div class="mb-6">
+                            <span class="text-5xl font-bold">$4.99</span>
+                            <span class="text-muted-foreground">/mois</span>
+                        </div>
+                        <ul class="mb-8 space-y-3">
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-5 h-5 text-primary"></i>
+                                <span>Accès complet aux workouts</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-5 h-5 text-primary"></i>
+                                <span>Sans publicités</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-5 h-5 text-primary"></i>
+                                <span>Timer avancé avec pauses</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-5 h-5 text-primary"></i>
+                                <span>Tous les exercices animés</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-5 h-5 text-primary"></i>
+                                <span>Coach IA personnalisé</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-5 h-5 text-primary"></i>
+                                <span>Programmes sur mesure</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-5 h-5 text-primary"></i>
+                                <span>Statistiques détaillées</span>
+                            </li>
+                        </ul>
+                        <button class="liquid-button liquid-button-variant-cool w-full size-lg">
+                            <i data-lucide="crown" class="w-6 h-6"></i>
+                            S'abonner
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="neu-convex p-12 rounded-3xl text-center max-w-4xl mx-auto">
+                <i data-lucide="rocket" class="w-16 h-16 text-primary mx-auto mb-6"></i>
+                <h2 class="text-4xl font-bold mb-4">Prêt à commencer?</h2>
+                <p class="text-xl text-muted-foreground mb-8">
+                    Rejoignez des milliers d'utilisateurs qui ont transformé leur vie
+                </p>
+                <button class="liquid-button liquid-button-variant-cool size-xl">
+                    <i data-lucide="play" class="w-6 h-6"></i>
+                    Démarrer Maintenant
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workouts Page -->
+    <div id="page-workouts" class="page hidden">
+        <div class="container mx-auto px-4 py-12">
+            <div class="mb-8">
+                <h1 class="text-4xl font-bold mb-2">Bibliothèque d'Exercices</h1>
+                <p class="text-muted-foreground">Explorez notre collection d'exercices animés</p>
+            </div>
+
+            <!-- Filters -->
+            <div class="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div class="flex flex-wrap gap-2">
+                    <button class="liquid-button liquid-button-variant-cool size-sm tab-active" onclick="filterExercises('all')">
+                        Tous
+                    </button>
+                    <button class="liquid-button liquid-button-variant-outline size-sm" onclick="filterExercises('Force')">
+                        <i data-lucide="dumbbell" class="w-4 h-4"></i> Force
+                    </button>
+                    <button class="liquid-button liquid-button-variant-outline size-sm" onclick="filterExercises('Cardio')">
+                        <i data-lucide="heart" class="w-4 h-4"></i> Cardio
+                    </button>
+                    <button class="liquid-button liquid-button-variant-outline size-sm" onclick="filterExercises('Core')">
+                        <i data-lucide="circle" class="w-4 h-4"></i> Core
+                    </button>
+                    <button class="liquid-button liquid-button-variant-outline size-sm" onclick="filterExercises('HIIT')">
+                        <i data-lucide="flame" class="w-4 h-4"></i> HIIT
+                    </button>
+                </div>
+
+                <div class="relative">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground"></i>
+                    <input type="text" placeholder="Rechercher..." class="neu-pressed w-full md:w-64 rounded-xl py-2 pl-10 pr-4 outline-none">
+                </div>
+            </div>
+
+            <!-- Exercises Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="exercises-grid">
+                <!-- Exercises will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Timer Page -->
+    <div id="page-timer" class="page hidden">
+        <div class="container mx-auto px-4 py-12">
+            <div class="mb-8">
+                <h1 class="text-4xl font-bold mb-2">Timer & Chronomètre</h1>
+                <p class="text-muted-foreground">Gérez vos pauses et entraînements avec précision</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <!-- Workout Timer -->
+                <div class="neu-convex p-8 rounded-2xl">
+                    <h2 class="text-xl font-semibold mb-6 flex items-center gap-2">
+                        <i data-lucide="dumbbell" class="w-5 h-5 text-primary"></i>
+                        Entraînement
+                    </h2>
+                    <div class="relative mx-auto h-64 w-64 mb-6">
+                        <svg class="h-64 w-64 -rotate-90" viewBox="0 0 200 200">
+                            <circle cx="100" cy="100" r="90" fill="none" stroke="currentColor" stroke-width="8" class="text-muted"/>
+                            <circle cx="100" cy="100" r="90" fill="none" stroke="currentColor" stroke-width="8" 
+                                stroke-dasharray="565.48" stroke-dashoffset="0" 
+                                stroke-linecap="round" class="text-primary transition-all duration-1000" id="timer-circle"/>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-6xl font-bold font-mono" id="timer-display">03:00</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-center gap-4">
+                        <button onclick="resetTimer(180)" class="liquid-button liquid-button-variant-cool size-icon">
+                            <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
+                        </button>
+                        <button onclick="toggleTimer(180)" class="liquid-button liquid-button-variant-cool size-lg" id="timer-btn">
+                            <i data-lucide="play" class="w-5 h-5" id="timer-icon"></i>
+                            <span id="timer-label">Démarrer</span>
+                        </button>
+                        <button onclick="skipTimer(180)" class="liquid-button liquid-button-variant-cool size-icon">
+                            <i data-lucide="skip-forward" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Rest Timer -->
+                <div class="neu-convex p-8 rounded-2xl">
+                    <h2 class="text-xl font-semibold mb-6 flex items-center gap-2">
+                        <i data-lucide="pause" class="w-5 h-5 text-primary"></i>
+                        Repos
+                    </h2>
+                    <div class="relative mx-auto h-64 w-64 mb-6">
+                        <svg class="h-64 w-64 -rotate-90" viewBox="0 0 200 200">
+                            <circle cx="100" cy="100" r="90" fill="none" stroke="currentColor" stroke-width="8" class="text-muted"/>
+                            <circle cx="100" cy="100" r="90" fill="none" stroke="currentColor" stroke-width="8" 
+                                stroke-dasharray="565.48" stroke-dashoffset="0" 
+                                stroke-linecap="round" class="text-primary transition-all duration-1000" id="timer-circle-rest"/>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-6xl font-bold font-mono" id="timer-display-rest">01:00</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-center gap-4">
+                        <button onclick="resetTimer(60, 'rest')" class="liquid-button liquid-button-variant-cool size-icon">
+                            <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
+                        </button>
+                        <button onclick="toggleTimer(60, 'rest')" class="liquid-button liquid-button-variant-cool size-lg" id="timer-btn-rest">
+                            <i data-lucide="play" class="w-5 h-5" id="timer-icon-rest"></i>
+                            <span id="timer-label-rest">Démarrer</span>
+                        </button>
+                        <button onclick="skipTimer(60, 'rest')" class="liquid-button liquid-button-variant-cool size-icon">
+                            <i data-lucide="skip-forward" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Timers -->
+            <div class="neu-concave p-8 rounded-2xl">
+                <h2 class="text-xl font-semibold mb-4">Contrôles Rapides</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button onclick="quickTimer(30)" class="liquid-button liquid-button-variant-cool size-lg h-20">
+                        30s
+                    </button>
+                    <button onclick="quickTimer(60)" class="liquid-button liquid-button-variant-cool size-lg h-20">
+                        60s
+                    </button>
+                    <button onclick="quickTimer(90)" class="liquid-button liquid-button-variant-cool size-lg h-20">
+                        90s
+                    </button>
+                    <button onclick="quickTimer(120)" class="liquid-button liquid-button-variant-cool size-lg h-20">
+                        120s
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat/AI Page -->
+    <div id="page-chat" class="page hidden">
+        <div class="container mx-auto px-4 py-12">
+            <div class="neu-concave max-w-4xl mx-auto rounded-3xl overflow-hidden">
+                <!-- Chat Header -->
+                <div class="border-b border-border p-6">
+                    <div class="flex items-center gap-3">
+                        <div class="h-12 w-12 rounded-full bg-primary flex items-center justify-center">
+                            <i data-lucide="bot" class="w-6 h-6 text-primary-foreground"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-lg">Coach IA</h3>
+                            <p class="text-xs text-muted-foreground flex items-center gap-1">
+                                <i data-lucide="circle" class="w-3 h-3 fill-green-500 text-green-500"></i>
+                                En ligne
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Messages -->
+                <div class="h-[500px] overflow-y-auto p-6 space-y-4" id="chat-messages">
+                    <div class="chat-message flex gap-3">
+                        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary">
+                            <i data-lucide="bot" class="w-4 h-4 text-primary-foreground"></i>
+                        </div>
+                        <div class="max-w-[70%] rounded-2xl bg-muted px-4 py-2">
+                            <p class="text-sm">Bonjour! Je suis votre coach IA. Comment puis-je vous aider aujourd'hui?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Input -->
+                <div class="border-t border-border p-6">
+                    <div class="flex gap-2">
+                        <input type="text" id="chat-input" placeholder="Posez votre question..." 
+                            class="neu-pressed flex-1 rounded-xl px-4 py-3 outline-none"
+                            onkeypress="if(event.key === 'Enter') sendMessage()">
+                        <button onclick="sendMessage()" class="liquid-button liquid-button-variant-cool size-icon">
+                            <i data-lucide="send" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile/Settings Page -->
+    <div id="page-profile" class="page hidden">
+        <div class="container mx-auto px-4 py-12">
+            <div class="mb-8 flex items-center justify-between">
+                <div>
+                    <h1 class="text-4xl font-bold mb-2">Paramètres</h1>
+                    <p class="text-muted-foreground">Personnalisez votre expérience</p>
+                </div>
+                <button onclick="toggleTheme()" class="liquid-button liquid-button-variant-cool size-icon">
+                    <i data-lucide="moon" class="w-5 h-5" id="theme-icon-profile"></i>
+                </button>
+            </div>
+
+            <div class="max-w-4xl space-y-6">
+                <!-- Appearance -->
+                <div class="neu-concave p-6 rounded-2xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i data-lucide="palette" class="w-5 h-5 text-primary"></i>
+                        <h2 class="text-xl font-semibold">Apparence</h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="moon" class="w-5 h-5"></i>
+                                <span>Thème {document.body.classList.contains('dark') ? 'Sombre' : 'Clair'}</span>
+                            </div>
+                            <button onclick="toggleTheme()" class="liquid-button liquid-button-variant-cool size-sm">
+                                Changer
+                            </button>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="type" class="w-5 h-5 text-primary"></i>
+                                <span>Taille du texte</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="liquid-button liquid-button-variant-outline size-sm" onclick="changeFontSize('sm')">SM</button>
+                                <button class="liquid-button liquid-button-variant-cool size-sm" onclick="changeFontSize('md')">MD</button>
+                                <button class="liquid-button liquid-button-variant-outline size-sm" onclick="changeFontSize('lg')">LG</button>
+                                <button class="liquid-button liquid-button-variant-outline size-sm" onclick="changeFontSize('xl')">XL</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications -->
+                <div class="neu-concave p-6 rounded-2xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i data-lucide="bell" class="w-5 h-5 text-primary"></i>
+                        <h2 class="text-xl font-semibold">Notifications</h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span>Activer les notifications</span>
+                            <button onclick="toggleNotification()" class="liquid-button liquid-button-variant-cool size-sm" id="notif-btn">
+                                ON
+                            </button>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="volume-2" class="w-5 h-5"></i>
+                                <span>Son</span>
+                            </div>
+                            <button onclick="toggleSound()" class="liquid-button liquid-button-variant-cool size-sm" id="sound-btn">
+                                ON
+                            </button>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <span>Vibration</span>
+                            <button onclick="toggleVibration()" class="liquid-button liquid-button-variant-cool size-sm" id="vibration-btn">
+                                ON
+                            </button>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <span>Intervalle de rappel (minutes)</span>
+                            <input type="range" min="1" max="30" value="5" class="w-32 accent-primary" id="notif-interval" oninput="updateNotifInterval(this.value)">
+                            <span class="font-semibold" id="notif-interval-value">5 min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subscription -->
+                <div class="neu-convex p-6 rounded-2xl ring-2 ring-primary">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                        <i data-lucide="crown" class="w-5 h-5 text-primary"></i>
+                        Abonnement
+                    </h2>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-2xl font-bold">Gratuit</p>
+                            <p class="text-sm text-muted-foreground">Avec publicités</p>
+                        </div>
+                        <button class="liquid-button liquid-button-variant-cool size-lg">
+                            <i data-lucide="crown" class="w-6 h-6"></i>
+                            Passer à Premium - $4.99/mois
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Exercises Data
+        const exercises = [
+            {
+                id: '1',
+                name: 'Squats',
+                description: 'Exercice de base pour les jambes et fessiers',
+                duration: 30,
+                reps: 15,
+                sets: 3,
+                category: 'Force',
+                difficulty: 'beginner',
+                muscleGroup: 'Jambes',
+                image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop',
+                animationType: 'squat'
+            },
+            {
+                id: '2',
+                name: 'Pompes',
+                description: 'Exercice pour le haut du corps',
+                duration: 30,
+                reps: 10,
+                sets: 3,
+                category: 'Force',
+                difficulty: 'intermediate',
+                muscleGroup: 'Pectoraux',
+                image: 'https://images.unsplash.com/photo-1598971639058-fab5d31aa1e3?w=400&h=300&fit=crop',
+                animationType: 'pushup'
+            },
+            {
+                id: '3',
+                name: 'Jumping Jacks',
+                description: 'Exercice cardio pour échauffer',
+                duration: 45,
+                reps: 20,
+                sets: 3,
+                category: 'Cardio',
+                difficulty: 'beginner',
+                muscleGroup: 'Full Body',
+                image: 'https://images.unsplash.com/photo-1538805060514-97d9cc17730c?w=400&h=300&fit=crop',
+                animationType: 'jumping-jack'
+            },
+            {
+                id: '4',
+                name: 'Planche',
+                description: 'Exercice pour le gainage',
+                duration: 30,
+                sets: 3,
+                category: 'Core',
+                difficulty: 'intermediate',
+                muscleGroup: 'Abdominaux',
+                image: 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=400&h=300&fit=crop',
+                animationType: 'plank'
+            },
+            {
+                id: '5',
+                name: 'Burpees',
+                description: 'Exercice complet haute intensité',
+                duration: 45,
+                reps: 10,
+                sets: 3,
+                category: 'HIIT',
+                difficulty: 'advanced',
+                muscleGroup: 'Full Body',
+                image: 'https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?w=400&h=300&fit=crop',
+                animationType: 'burpee'
+            },
+            {
+                id: '6',
+                name: 'Fentes',
+                description: 'Exercice unilatéral pour les jambes',
+                duration: 30,
+                reps: 12,
+                sets: 3,
+                category: 'Force',
+                difficulty: 'intermediate',
+                muscleGroup: 'Jambes',
+                image: 'https://images.unsplash.com/photo-1434608519344-49d77a699e1d?w=400&h=300&fit=crop',
+                animationType: 'lunge'
+            }
+        ];
+
+        // Timer State
+        let timers = {
+            workout: { time: 180, running: false, interval: null },
+            rest: { time: 60, running: false, interval: null }
+        };
+
+        // Chat State
+        let chatMessages = [
+            { id: '1', role: 'assistant', content: 'Bonjour! Je suis votre coach IA. Comment puis-je vous aider aujourd\'hui?', timestamp: new Date() }
+        ];
+
+        // Notification State
+        let settings = {
+            notifications: true,
+            sound: true,
+            vibration: true,
+            notifInterval: 5
+        };
+
+        // Page Navigation
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+            document.getElementById(`page-${page}`).classList.remove('hidden');
+            
+            // Update nav
+            document.querySelectorAll('[data-tab]').forEach(btn => {
+                btn.classList.remove('tab-active');
+                if (btn.dataset.tab === page) {
+                    btn.classList.add('tab-active');
+                }
+            });
+
+            // Initialize page-specific content
+            if (page === 'workouts') {
+                renderExercises();
+            }
+        }
+
+        // Theme Toggle
+        function toggleTheme() {
+            const body = document.body;
+            const icon1 = document.getElementById('theme-icon');
+            const icon2 = document.getElementById('theme-icon-profile');
+            
+            if (body.classList.contains('dark')) {
+                body.classList.remove('dark');
+                body.classList.add('light');
+                if (icon1) icon1.setAttribute('data-lucide', 'sun');
+                if (icon2) icon2.setAttribute('data-lucide', 'sun');
+            } else {
+                body.classList.remove('light');
+                body.classList.add('dark');
+                if (icon1) icon1.setAttribute('data-lucide', 'moon');
+                if (icon2) icon2.setAttribute('data-lucide', 'moon');
+            }
+            
+            lucide.createIcons();
+        }
+
+        // Render Exercises
+        function renderExercises(filter = 'all') {
+            const grid = document.getElementById('exercises-grid');
+            const filtered = filter === 'all' ? exercises : exercises.filter(e => e.category === filter);
+            
+            grid.innerHTML = filtered.map(exercise => `
+                <div class="neu-convex p-6 rounded-2xl hover:scale-105 transition-transform cursor-pointer" onclick="showExerciseDetail('${exercise.id}')">
+                    <div class="relative h-48 overflow-hidden rounded-t-2xl mb-4">
+                        <img src="${exercise.image}" alt="${exercise.name}" class="h-full w-full object-cover transition-transform duration-300 hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4">
+                            <span class="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground">
+                                ${exercise.difficulty}
+                            </span>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-1">${exercise.name}</h3>
+                    <p class="text-sm text-muted-foreground mb-3">${exercise.description}</p>
+                    <div class="mb-4 flex gap-4 text-sm">
+                        <div>
+                            <span class="text-muted-foreground">Durée: </span>
+                            <span class="font-semibold">${exercise.duration}s</span>
+                        </div>
+                        ${exercise.reps ? `<div>
+                            <span class="text-muted-foreground">Reps: </span>
+                            <span class="font-semibold">${exercise.reps}</span>
+                        </div>` : ''}
+                        <div>
+                            <span class="text-muted-foreground">Groupe: </span>
+                            <span class="font-semibold">${exercise.muscleGroup}</span>
+                        </div>
+                    </div>
+                    <button class="liquid-button liquid-button-variant-cool w-full size-sm">
+                        <i data-lucide="play" class="w-4 h-4"></i>
+                        Voir l'Animation
+                    </button>
+                </div>
+            `).join('');
+            
+            lucide.createIcons();
+        }
+
+        function filterExercises(category) {
+            renderExercises(category);
+        }
+
+        function showExerciseDetail(id) {
+            const exercise = exercises.find(e => e.id === id);
+            alert(`Animation de ${exercise.name} - ${exercise.description}`);
+        }
+
+        // Timer Functions
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateTimerDisplay(type, time) {
+            const display = document.getElementById(`timer-display${type === 'rest' ? '-rest' : ''}`);
+            const circle = document.getElementById(`timer-circle${type === 'rest' ? '-rest' : ''}`);
+            
+            if (display) display.textContent = formatTime(time);
+            if (circle) {
+                const totalTime = type === 'rest' ? 60 : 180;
+                const progress = (totalTime - time) / totalTime;
+                const circumference = 2 * Math.PI * 90;
+                circle.style.strokeDashoffset = circumference * (1 - progress);
+            }
+        }
+
+        function toggleTimer(initialTime, type = 'workout') {
+            const timer = timers[type];
+            const btn = document.getElementById(`timer-btn${type === 'rest' ? '-rest' : ''}`);
+            const icon = document.getElementById(`timer-icon${type === 'rest' ? '-rest' : ''}`);
+            const label = document.getElementById(`timer-label${type === 'rest' ? '-rest' : ''}`);
+            
+            if (timer.running) {
+                clearInterval(timer.interval);
+                timer.running = false;
+                icon.setAttribute('data-lucide', 'play');
+                label.textContent = 'Démarrer';
+                lucide.createIcons();
+            } else {
+                timer.running = true;
+                icon.setAttribute('data-lucide', 'pause');
+                label.textContent = 'Pause';
+                lucide.createIcons();
+                
+                timer.interval = setInterval(() => {
+                    if (timer.time > 0) {
+                        timer.time--;
+                        updateTimerDisplay(type, timer.time);
+                    } else {
+                        clearInterval(timer.interval);
+                        timer.running = false;
+                        icon.setAttribute('data-lucide', 'play');
+                        label.textContent = 'Terminé';
+                        alert('Timer terminé!');
+                    }
+                }, 1000);
+            }
+        }
+
+        function resetTimer(initialTime, type = 'workout') {
+            const timer = timers[type];
+            clearInterval(timer.interval);
+            timer.time = initialTime;
+            timer.running = false;
+            updateTimerDisplay(type, timer.time);
+            
+            const btn = document.getElementById(`timer-btn${type === 'rest' ? '-rest' : ''}`);
+            const icon = document.getElementById(`timer-icon${type === 'rest' ? '-rest' : ''}`);
+            const label = document.getElementById(`timer-label${type === 'rest' ? '-rest' : ''}`);
+            
+            icon.setAttribute('data-lucide', 'play');
+            label.textContent = 'Démarrer';
+            lucide.createIcons();
+        }
+
+        function skipTimer(initialTime, type = 'workout') {
+            resetTimer(initialTime, type);
+        }
+
+        function quickTimer(seconds) {
+            alert(`Timer rapide: ${seconds} secondes`);
+        }
+
+        // Chat Functions
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            addChatMessage('user', message);
+            input.value = '';
+            
+            // Simulate AI response
+            setTimeout(() => {
+                const responses = [
+                    'Excellente question! Pour cet exercice, concentrez-vous sur votre respiration. Inspirez en descendant, expirez en remontant.',
+                    'Je recommande de faire 3 séries de 12 répétitions. Prenez 30 secondes de repos entre chaque série.',
+                    'N\'oubliez pas de vous échauffer pendant 5 minutes avant de commencer. Cela préviendra les blessures.',
+                    'Parfait! Votre forme est excellente. Essayez d\'augmenter le poids progressivement chaque semaine.',
+                    'C\'est un bon début! Pour améliorer, essayez de garder le dos droit et les épaules en arrière.'
+                ];
+                
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addChatMessage('assistant', randomResponse);
+            }, 1500);
+        }
+
+        function addChatMessage(role, content) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const messageId = Date.now().toString();
+            
+            const messageHTML = `
+                <div class="chat-message flex gap-3 ${role === 'user' ? 'flex-row-reverse' : ''}">
+                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${role === 'user' ? 'bg-primary' : 'bg-muted'}">
+                        <i data-lucide="${role === 'user' ? 'user' : 'bot'}" class="w-4 h-4 ${role === 'user' ? 'text-primary-foreground' : 'text-foreground'}"></i>
+                    </div>
+                    <div class="max-w-[70%] rounded-2xl px-4 py-2 ${role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted text-foreground'}">
+                        <p class="text-sm">${content}</p>
+                    </div>
+                </div>
+            `;
+            
+            messagesContainer.insertAdjacentHTML('beforeend', messageHTML);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            lucide.createIcons();
+        }
+
+        // Settings Functions
+        function toggleNotification() {
+            settings.notifications = !settings.notifications;
+            const btn = document.getElementById('notif-btn');
+            btn.textContent = settings.notifications ? 'ON' : 'OFF';
+        }
+
+        function toggleSound() {
+            settings.sound = !settings.sound;
+            const btn = document.getElementById('sound-btn');
+            btn.textContent = settings.sound ? 'ON' : 'OFF';
+        }
+
+        function toggleVibration() {
+            settings.vibration = !settings.vibration;
+            const btn = document.getElementById('vibration-btn');
+            btn.textContent = settings.vibration ? 'ON' : 'OFF';
+        }
+
+        function updateNotifInterval(value) {
+            settings.notifInterval = value;
+            document.getElementById('notif-interval-value').textContent = `${value} min`;
+        }
+
+        function changeFontSize(size) {
+            alert(`Taille du texte changée en: ${size}`);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            showPage('home');
+        });
+    </script>
+</body>
+</html>
