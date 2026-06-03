@@ -1,0 +1,274 @@
+/* ============================================
+   RESPONSIVE — Breakpoints
+   ============================================ */
+
+/* ===== Large desktops (default 1320px) ===== */
+
+/* ===== Medium desktops ===== */
+@media (max-width: 1100px) {
+  .nav__links { display: none; }
+
+  .hero__robot {
+    width: 420px;
+    height: 420px;
+    right: -2%;
+    opacity: 0.85;
+  }
+
+  .hero__meta {
+    gap: var(--s-7);
+  }
+
+  .services__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .process__timeline {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--s-7);
+  }
+
+  .process__line { display: none; }
+
+  .projets__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .projet--big,
+  .projet--wide {
+    grid-column: span 2;
+  }
+
+  .testimonial {
+    flex: 0 0 100%;
+  }
+
+  .contact__container {
+    grid-template-columns: 1fr;
+    gap: var(--s-7);
+  }
+
+  .contact__head {
+    position: static;
+  }
+
+  .footer__container {
+    grid-template-columns: 1fr;
+    gap: var(--s-7);
+  }
+}
+
+/* ===== Tablets ===== */
+@media (max-width: 768px) {
+  :root {
+    --s-9: 72px;
+    --s-10: 96px;
+    --s-11: 120px;
+  }
+
+  .nav__cta { display: none; }
+  .nav__burger { display: flex; }
+
+  .nav__bar {
+    padding: 6px 6px 6px 18px;
+  }
+
+  .hero {
+    padding-top: 120px;
+  }
+
+  .hero__title {
+    font-size: clamp(48px, 14vw, 88px);
+  }
+
+  .hero__robot {
+    position: relative;
+    top: 0;
+    right: 0;
+    transform: none;
+    width: 100%;
+    max-width: 380px;
+    height: 380px;
+    margin: 0 auto var(--s-6);
+    order: -1;
+    opacity: 1;
+  }
+
+  .hero__content {
+    gap: var(--s-5);
+  }
+
+  .hero__pills {
+    margin-top: 0;
+  }
+
+  .hero__meta {
+    gap: var(--s-5);
+    flex-wrap: wrap;
+  }
+
+  .hero__scroll {
+    display: none;
+  }
+
+  .manifeste__grid {
+    grid-template-columns: 1fr;
+    gap: var(--s-7);
+  }
+
+  .manifeste__lead {
+    position: static;
+    font-size: var(--fs-6);
+  }
+
+  .manifeste__cards {
+    grid-template-columns: 1fr;
+  }
+
+  .services__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .process__timeline {
+    grid-template-columns: 1fr;
+  }
+
+  .projets__grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: 320px;
+  }
+
+  .projet--big,
+  .projet--wide,
+  .projet {
+    grid-column: span 1;
+  }
+
+  .testimonial {
+    flex: 0 0 100%;
+    padding: var(--s-5);
+  }
+
+  .form__row {
+    grid-template-columns: 1fr;
+  }
+
+  .form {
+    padding: var(--s-5);
+  }
+
+  .footer__cols {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-5);
+  }
+
+  .footer__bottom {
+    flex-direction: column;
+    gap: var(--s-3);
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .testimonials__controls {
+    padding-right: 0;
+    justify-content: center;
+  }
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 480px) {
+  .hero__title {
+    font-size: clamp(40px, 13vw, 64px);
+  }
+
+  .hero__cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero__cta .btn {
+    justify-content: center;
+  }
+
+  .hero__meta-item:nth-child(2) {
+    display: none;
+  }
+
+  .section-head {
+    margin-bottom: var(--s-7);
+  }
+
+  .section-head__title {
+    font-size: var(--fs-7);
+  }
+
+  .form {
+    padding: var(--s-4);
+    border-radius: var(--r-lg);
+  }
+
+  .manifeste__quote {
+    font-size: 3em;
+  }
+
+  .testimonial {
+    flex: 0 0 100%;
+  }
+
+  .footer__cols {
+    grid-template-columns: 1fr;
+  }
+
+  .hero__robot {
+    height: 320px;
+  }
+
+  .robot__head {
+    width: 180px;
+    height: 165px;
+  }
+
+  .robot__torso {
+    width: 150px;
+    height: 110px;
+  }
+
+  .robot__body {
+    width: 260px;
+    height: 300px;
+  }
+}
+
+/* ===== Hide cursor on touch / small screens ===== */
+@media (hover: none), (max-width: 1024px) {
+  .cursor { display: none !important; }
+  body, body * { cursor: auto !important; }
+}
+
+/* ===== Reduced motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track,
+  .robot,
+  .robot__aura,
+  .robot__shadow,
+  .hero__tag .dot,
+  .hero__scroll-line::after,
+  .robot__antenna-ball,
+  .robot__eye,
+  .robot__arm,
+  .robot__screen-bar {
+    animation: none !important;
+  }
+
+  .robot__pupil {
+    transform: translate(0, 0) !important;
+  }
+
+  [data-reveal],
+  [data-split] .split-line > span,
+  [data-split] .split-word > span {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

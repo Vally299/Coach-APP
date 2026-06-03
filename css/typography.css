@@ -1,0 +1,125 @@
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+body {
+  font-family: var(--f-body);
+  font-size: var(--fs-3);
+  font-weight: 400;
+  color: var(--c-text);
+  background: var(--c-bg);
+  letter-spacing: -0.01em;
+}
+
+em {
+  font-style: italic;
+  font-family: var(--f-hand);
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--c-accent);
+}
+
+strong {
+  font-weight: 600;
+  color: var(--c-text);
+}
+
+/* ===== Display headlines ===== */
+.h-display {
+  font-family: var(--f-display);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+}
+
+.h-1 { font-size: var(--fs-9); }
+.h-2 { font-size: var(--fs-8); }
+.h-3 { font-size: var(--fs-7); }
+.h-4 { font-size: var(--fs-6); }
+.h-5 { font-size: var(--fs-5); }
+
+/* ===== Handwritten accents ===== */
+.hand {
+  font-family: var(--f-hand);
+  font-weight: 500;
+  font-size: 1.4em;
+  line-height: 0.9;
+  color: var(--c-accent);
+}
+
+/* ===== Mono labels ===== */
+.mono {
+  font-family: var(--f-mono);
+  font-size: var(--fs-1);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--c-text-soft);
+}
+
+/* ===== Section headers ===== */
+.section-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+  margin-bottom: var(--s-9);
+  max-width: 900px;
+}
+
+.section-head__index {
+  font-family: var(--f-mono);
+  font-size: var(--fs-1);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--c-accent);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+.section-head__index::before {
+  content: "";
+  display: inline-block;
+  width: 32px;
+  height: 1px;
+  background: var(--c-accent);
+}
+
+.section-head__title {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: var(--fs-8);
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  color: var(--c-text);
+}
+
+.section-head__title em {
+  font-size: 0.95em;
+}
+
+.section-head__sub {
+  font-size: var(--fs-5);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--c-text-soft);
+  max-width: 620px;
+}
+
+.section-head--mini {
+  margin-bottom: var(--s-7);
+}
+
+/* ===== Body text ===== */
+.lead {
+  font-size: var(--fs-6);
+  line-height: 1.35;
+  color: var(--c-text);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+
+.text-soft { color: var(--c-text-soft); }
+.text-mute { color: var(--c-text-mute); }
+.text-accent { color: var(--c-accent); }
